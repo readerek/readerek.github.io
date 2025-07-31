@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器人抓取研究 - 多功能抓取系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(120deg, var(--primary), var(--dark));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-content h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header-content p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .header-decoration {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+            top: -150px;
+            right: -100px;
+            z-index: 1;
+        }
+        
+        .header-decoration:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: auto;
+            bottom: -100px;
+            left: -50px;
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            padding: 1.2rem 1.5rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            font-size: 1.05rem;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--secondary);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .video-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        
+        .video-placeholder {
+            background: linear-gradient(135deg, #5c6bc0, #3949ab);
+            border-radius: 12px;
+            padding: 25% 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .video-placeholder i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            color: white;
+            opacity: 0.8;
+            text-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .video-placeholder:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(92, 107, 192, 0.8), 
+                rgba(57, 73, 171, 0.9));
+        }
+        
+        .video-placeholder .video-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+            width: 100%;
+            padding: 0 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .content-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        .paper-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: var(--transition);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .paper-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .paper-card h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .paper-card h3 i {
+            margin-right: 12px;
+            color: var(--secondary);
+        }
+        
+        .paper-content {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .paper-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .paper-text p {
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .paper-image {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(45deg, #e0e0e0, #f5f5f5);
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .paper-image i {
+            font-size: 4rem;
+            color: #bdbdbd;
+        }
+        
+        .research-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .highlight-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.8rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            border-top: 3px solid var(--secondary);
+        }
+        
+        .highlight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .highlight-card h4 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .highlight-card h4 i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.7rem;
+        }
+        
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+        
+        .footer-links a i {
+            margin-right: 8px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .github-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: var(--transition);
+        }
+        
+        .github-badge:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                padding: 0.8rem 1rem;
+            }
+            
+            .header-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .paper-content {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .paper-card {
+                padding: 1.8rem;
+            }
+            
+            .paper-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-decoration"></div>
+        <div class="header-decoration"></div>
+        <div class="header-content">
+            <h1>多功能机器人抓取系统研究</h1>
+            <p>一种适用于多样化物体、可变形物体及受限环境的自适应抓取方法</p>
+            <a href="#" class="github-badge">
+                <i class="fab fa-github"></i> 查看项目代码
+            </a>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#abstract">Abstract</a></li>
+                <li><a href="#evaluation">Evaluated Objects</a></li>
+                <li><a href="#diverse">Grasping of Diverse Objects</a></li>
+                <li><a href="#deformable">Grasping of Deformable Objects</a></li>
+                <li><a href="#constrained">Grasping in Constrained Environment</a></li>
+                <li><a href="#video">演示视频</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <section class="video-container" id="video">
+        <div class="section-title">
+            <h2>研究演示视频</h2>
+        </div>
+        <div class="video-placeholder">
+            <div class="video-text">
+                <i class="fas fa-play-circle"></i>
+                <p>论文研究成果视频展示</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="abstract">
+        <div class="section-title">
+            <h2>摘要</h2>
+        </div>
+        <div class="paper-card">
+            <h3><i class="fas fa-file-alt"></i> 研究概述</h3>
+            <div class="paper-content">
+                <div class="paper-text">
+                    <p>本文提出了一种新颖的机器人抓取框架，能够在多种复杂场景下实现鲁棒和自适应的物体抓取。该框架结合了深度学习和强化学习技术，解决了传统抓取方法在多样化物体、可变形物体和受限环境中的局限性。</p>
+                    <p>我们的方法采用多模态感知输入（RGB-D图像、触觉传感和力反馈），通过分层决策网络生成最优抓取策略。系统首先通过物体分割和属性识别模块分析场景，然后通过抓取规划模块生成候选抓取位姿，最后通过执行控制模块完成抓取动作。</p>
+                    <p>实验结果表明，我们的系统在多样化物体抓取任务中达到了95.2%的成功率，在可变形物体抓取中达到89.7%的成功率，在受限环境任务中达到91.4%的成功率，显著优于现有方法。</p>
+                </div>
+                <div class="paper-image">
+                    <i class="fas fa-brain"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="evaluation">
+        <div class="section-title">
+            <h2>评估对象</h2>
+        </div>
+        <div class="paper-card">
+            <h3><i class="fas fa-cube"></i> 实验对象与方法</h3>
+            <div class="paper-content">
+                <div class="paper-text">
+                    <p>我们构建了一个包含200多种物体的综合数据集，涵盖不同形状、尺寸、重量、材质和变形特性的物体。数据集分为三个主要类别：</p>
+                    <p><strong>1. 刚性物体：</strong> 包括日常用品（杯子、书籍、工具）、工业零件（齿轮、螺栓）和形状不规则物体。</p>
+                    <p><strong>2. 可变形物体：</strong> 包括布料、塑料袋、软性玩具、线缆和可压缩物体。</p>
+                    <p><strong>3. 受限环境物体：</strong> 包括放置在狭窄空间、密集堆叠环境或部分遮挡的物体。</p>
+                    <p>评估指标包括抓取成功率、抓取稳定性评分、物体变形程度、执行时间和能耗等。我们使用UR5机械臂配备Robotiq自适应抓手和多个传感器（Intel RealSense D435、GelSight触觉传感器）进行实验验证。</p>
+                </div>
+                <div class="paper-image">
+                    <i class="fas fa-shapes"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="diverse">
+        <div class="section-title">
+            <h2>多样化物体抓取</h2>
+        </div>
+        <div class="paper-card">
+            <h3><i class="fas fa-boxes"></i> 多样化物体抓取方法</h3>
+            <div class="paper-content">
+                <div class="paper-text">
+                    <p>针对形状、尺寸和材质各异的物体，我们提出了一种基于点云分割和属性预测的抓取生成网络(GGN)。该网络通过以下创新点解决多样化抓取挑战：</p>
+                    <p><strong>• 多尺度特征融合：</strong> 结合局部几何特征和全局语义信息，适应不同尺寸物体。</p>
+                    <p><strong>• 材质感知抓取规划：</strong> 通过表面属性预测调整抓取力和接触点，适应光滑、粗糙、柔软等不同材质。</p>
+                    <p><strong>• 形状自适应抓取采样：</strong> 针对规则/不规则形状物体采用不同的抓取候选生成策略。</p>
+                    <p>实验表明，我们的方法在YCB物体数据集上实现了95.2%的平均抓取成功率，在挑战性物体（如透明物体、反光物体）上达到87.3%的成功率，比现有最佳方法提高12.5%。</p>
+                </div>
+                <div class="paper-image">
+                    <i class="fas fa-robot"></i>
+                </div>
+            </div>
+            
+            <div class="research-highlights">
+                <div class="highlight-card">
+                    <h4><i class="fas fa-ruler-combined"></i> 尺寸适应性</h4>
+                    <p>系统可处理从5mm小零件到50cm大物体的抓取任务，通过动态调整抓取策略和力控制参数。</p>
+                </div>
+                <div class="highlight-card">
+                    <h4><i class="fas fa-texture"></i> 材质适应性</h4>
+                    <p>针对不同材质表面（金属、塑料、木材、织物）采用不同的接触模型和防滑策略。</p>
+                </div>
+                <div class="highlight-card">
+                    <h4><i class="fas fa-weight-hanging"></i> 重量适应性</h4>
+                    <p>通过力矩估计和重心预测，自动调整抓取姿势以防止物体滑动或旋转。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="deformable">
+        <div class="section-title">
+            <h2>可变形物体抓取</h2>
+        </div>
+        <div class="paper-card">
+            <h3><i class="fas fa-tshirt"></i> 可变形物体抓取技术</h3>
+            <div class="paper-content">
+                <div class="paper-text">
+                    <p>针对布料、塑料袋等可变形物体，我们开发了一种基于物理模拟和实时形变预测的抓取框架：</p>
+                    <p><strong>• 形变预测网络(DPN)：</strong> 基于深度学习的实时形变预测模型，可准确估计不同抓取动作下的物体变形。</p>
+                    <p><strong>• 自适应抓取点选择：</strong> 根据物体材料特性和预期形变，选择最小化变形的抓取点。</p>
+                    <p><strong>• 柔顺控制策略：</strong> 结合阻抗控制和触觉反馈，实现安全稳定的可变形物体操作。</p>
+                    <p>在包含20种不同可变形物体的测试集上，我们的方法实现了89.7%的平均抓取成功率，比传统方法提高22.3%。特别在薄塑料包装袋抓取任务中，成功率从41.2%提升至85.6%。</p>
+                </div>
+                <div class="paper-image">
+                    <i class="fas fa-socks"></i>
+                </div>
+            </div>
+            
+            <div class="research-highlights">
+                <div class="highlight-card">
+                    <h4><i class="fas fa-wind"></i> 布料操作</h4>
+                    <p>实现衣物展开、折叠和悬挂等复杂操作，成功处理不同厚度和弹性的布料材料。</p>
+                </div>
+                <div class="highlight-card">
+                    <h4><i class="fas fa-wine-bottle"></i> 包装袋抓取</h4>
+                    <p>针对易变形、易破损的塑料包装袋，开发了低压力抓取策略和防撕裂检测。</p>
+                </div>
+                <div class="highlight-card">
+                    <h4><i class="fas fa-dumbbell"></i> 软性物体抓取</h4>
+                    <p>成功抓取海绵、泡沫等可压缩物体，保持形状完整性和功能完整性。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="constrained">
+        <div class="section-title">
+            <h2>受限环境抓取</h2>
+        </div>
+        <div class="paper-card">
+            <h3><i class="fas fa-compress-arrows-alt"></i> 受限空间抓取解决方案</h3>
+            <div class="paper-content">
+                <div class="paper-text">
+                    <p>针对狭窄空间、遮挡环境和密集堆叠场景，我们提出了一种层次化抓取规划框架：</p>
+                    <p><strong>• 空间感知抓取规划：</strong> 结合3D场景重建和碰撞预测，生成无碰撞抓取路径。</p>
+                    <p><strong>• 部分观察补偿：</strong> 使用生成对抗网络(GAN)预测被遮挡部分的几何形状。</p>
+                    <p><strong>• 渐进式操作策略：</strong> 对于密集堆叠物体，采用"移开-抓取"的多步操作策略。</p>
+                    <p>在模拟和真实世界的受限环境测试中，我们的方法实现了91.4%的平均成功率。在狭窄空间任务（间隙小于5cm）中，成功率从传统方法的35.7%提升至82.4%。</p>
+                </div>
+                <div class="paper-image">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+            </div>
+            
+            <div class="research-highlights">
+                <div class="highlight-card">
+                    <h4><i class="fas fa-box"></i> 狭窄空间抓取</h4>
+                    <p>在有限空间内实现高精度抓取，最小操作间隙可达3cm，适用于机箱内操作等场景。</p>
+                </div>
+                <div class="highlight-card">
+                    <h4><i class="fas fa-layer-group"></i> 密集堆叠处理</h4>
+                    <p>解决物体堆叠时的稳定性问题，避免抓取过程中的连锁倒塌现象。</p>
+                </div>
+                <div class="highlight-card">
+                    <h4><i class="fas fa-eye-slash"></i> 遮挡场景适应</h4>
+                    <p>在物体50%以上被遮挡的情况下，仍能保持78.3%的抓取成功率。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>研究团队</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-user"></i> Dr. 张伟 - 首席研究员</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> Prof. 李敏 - 项目指导</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> 王思聪 - 算法开发</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> 陈晓 - 实验验证</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>相关资源</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-file-pdf"></i> 完整论文下载</a></li>
+                    <li><a href="#"><i class="fas fa-database"></i> 研究数据集</a></li>
+                    <li><a href="#"><i class="fab fa-github"></i> GitHub 代码库</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> 实验视频集</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>联系与合作</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:contact@grasping-research.edu"><i class="fas fa-envelope"></i> 联系邮箱</a></li>
+                    <li><a href="#"><i class="fas fa-handshake"></i> 合作咨询</a></li>
+                    <li><a href="#"><i class="fas fa-briefcase"></i> 工业应用</a></li>
+                    <li><a href="#"><i class="fas fa-graduation-cap"></i> 学术交流</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 机器人抓取研究实验室 | 多功能机器人抓取系统 | 保留所有权利</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 导航栏高亮
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if(pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
