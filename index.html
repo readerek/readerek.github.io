@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Keyu Wang at Shanghai Jiao Tong University. Research in tactile sensing, dexterous manipulation, robot learning, and reinforcement learning.">
+  <meta name="theme-color" content="#183e3b">
+  <title>Keyu Wang | Academic Homepage</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="papers.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <aside class="sidebar" aria-label="Profile and navigation">
+    <a class="identity" href="#about" aria-label="Keyu Wang, back to About">
+      <span class="monogram" aria-hidden="true">KW<span></span></span>
+      <span class="name-cn">Keyu Wang</span>
+      <span class="name-en" lang="zh-CN">王柯喻</span>
+    </a>
+    <p class="affiliation">Shanghai Jiao Tong University</p>
+    <div class="sidebar-rule"></div>
+    <nav aria-label="Main navigation">
+      <a class="nav-link active" href="#about"><span>About</span><span>01</span></a>
+      <a class="nav-link" href="#research"><span>Research</span><span>02</span></a>
+      <a class="nav-link" href="#awards"><span>Awards</span><span>03</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <p class="contact-label">GET IN TOUCH</p>
+      <a class="contact-link" href="mailto:readerek@sjtu.edu.cn">readerek@sjtu.edu.cn <span aria-hidden="true">↗</span></a>
+      <a class="contact-link" href="https://github.com/readerek" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      <p class="location"><span aria-hidden="true">◉</span> Shanghai, China</p>
+    </div>
+  </aside>
+
+  <main id="main">
+    <header class="topline"><span>ACADEMIC HOMEPAGE</span><span>TOUCH · LEARN · INTERACT</span></header>
+    <section id="about" class="intro" aria-labelledby="intro-title">
+      <p class="eyebrow">ABOUT ME</p>
+      <h1 id="intro-title">From tactile perception<br>to reliable manipulation<span class="period">.</span></h1>
+      <p class="bio">I am Keyu Wang at Shanghai Jiao Tong University. My research focuses on <strong>tactile sensing, dexterous manipulation, and robot learning</strong>. I aim to help robots understand objects through touch and act reliably during complex physical interactions.</p>
+      <p class="bio secondary">My work spans tactile simulation and representation learning, multimodal manipulation policies, deformable object grasping, and reinforcement learning for real-time communication.</p>
+      <div class="interests" aria-label="Research interests"><span>Tactile Sensing</span><span>Dexterous Manipulation</span><span>Reinforcement Learning</span></div>
+      <a class="news" href="#awards">
+        <span class="news-date">NOV 2026</span>
+        <span><strong>DeformableGrasp receives the Best Student Paper Award</strong><br><span>ACM Multimedia · Mulsemedia Workshop</span></span>
+        <span class="news-arrow" aria-hidden="true">↗</span>
+      </a>
+    </section>
+
+    <section id="research" class="research-section" aria-labelledby="research-title">
+      <div class="section-heading"><div><p class="eyebrow">RESEARCH</p><h2 id="research-title">Selected Work</h2></div><span class="section-index" aria-hidden="true">02</span></div>
+      <div class="research-toolbar">
+        <div class="filters" role="group" aria-label="Filter by research area">
+          <button type="button" class="filter active" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="filter" data-filter="robotics" aria-pressed="false">Manipulation</button>
+          <button type="button" class="filter" data-filter="tactile" aria-pressed="false">Tactile Sensing</button>
+          <button type="button" class="filter" data-filter="network" aria-pressed="false">Communication</button>
+        </div>
+        <span id="result-count" class="result-count" aria-live="polite">5 works</span>
+      </div>
+      <div id="papers" class="papers"></div>
+      <noscript><p>Please enable JavaScript to view the research list, or read Research.md in the website folder.</p></noscript>
+    </section>
+
+    <section id="awards" class="awards-section" aria-labelledby="awards-title">
+      <div class="section-heading"><div><p class="eyebrow">RECOGNITION</p><h2 id="awards-title">Honors &amp; Awards</h2></div><span class="section-index" aria-hidden="true">03</span></div>
+      <article class="award-card">
+        <div class="award-copy">
+          <span class="award-date">NOVEMBER 2026</span>
+          <div class="award-mark" aria-hidden="true">✧</div>
+          <h3 lang="en">Best Student<br>Paper Award</h3>
+          <p class="award-cn">MULSEMEDIA WORKSHOP</p>
+          <p class="award-venue">ACM Multimedia 2026<br>2nd International Workshop on<br>MultiSensorial Media and Applications</p>
+          <p class="award-paper">DeformableGrasp</p>
+          <button type="button" class="text-button" data-image="assets/best-student-paper.webp" data-caption="DeformableGrasp · Best Student Paper Award · Mulsemedia 2026">View certificate <span aria-hidden="true">↗</span></button>
+        </div>
+        <button type="button" class="certificate" data-image="assets/best-student-paper.webp" data-caption="DeformableGrasp · Best Student Paper Award · Mulsemedia 2026" aria-label="Enlarge the Best Student Paper Award certificate"><img src="assets/best-student-paper.webp" alt="Best Student Paper Award certificate for DeformableGrasp, awarded on November 10, 2026" width="1106" height="767"></button>
+      </article>
+    </section>
+    <footer><span>© <span id="year">2026</span> Keyu Wang</span><a href="#about">Back to top ↑</a></footer>
+  </main>
+
+  <dialog id="image-dialog" aria-labelledby="image-caption">
+    <div class="dialog-bar"><p id="image-caption"></p><button type="button" id="close-dialog" aria-label="Close image">✕</button></div>
+    <div class="dialog-image"><img id="expanded-image" src="assets/tacduo.webp" alt=""></div>
+  </dialog>
+</body>
+</html>
